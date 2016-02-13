@@ -174,11 +174,19 @@ describe('findAllComponentDefinitions', () => {
           };
           return helpers.comp();
         };
+        function ComponentG(props) {
+          return <div>{props.children}</div>;
+        }
+        function ComponentH(props) {
+          return props.open ?
+            <div>this</div> :
+            <div>that</div>;
+        }
       `;
 
       var result = parse(source);
       expect(Array.isArray(result)).toBe(true);
-      expect(result.length).toBe(7);
+      expect(result.length).toBe(9);
     });
 
     it('finds React.createElement, independent of the var name', () => {

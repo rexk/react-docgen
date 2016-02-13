@@ -66,7 +66,15 @@ function returnsJSXElementOrReactCreateElementCall(path) {
 
   recast.visit(path, {
     visitReturnStatement(returnPath) {
-      const resolvedPath = resolveToValue(returnPath.get('argument'));
+      let resolvedPath = resolveToValue(returnPath.get('argument'));
+      if (resolvedPath.node.type === 'ConditionalExpression') {
+        let consequentValue = resolvedPath.get('consequent');
+        if (returnsJSXElementOrReactCreateElementCall(consequentValue)) {
+          visited = true;
+          return false;
+        }
+      }
+
       if (
         isJSXElementOrReactCreateElement(resolvedPath) &&
         isSameBlockScope(returnPath)
@@ -134,7 +142,6 @@ export default function isStatelessComponent(
   path: NodePath
 ): bool {
   var node = path.node;
-
   if (validPossibleStatelessComponentTypes.indexOf(node.type) === -1) {
     return false;
   }

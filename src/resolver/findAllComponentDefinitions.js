@@ -57,7 +57,7 @@ export default function findAllReactCreateClassCalls(
         definitions.push(resolvedPath);
       }
       return false;
-    },
+    }
   });
 
   return definitions;
